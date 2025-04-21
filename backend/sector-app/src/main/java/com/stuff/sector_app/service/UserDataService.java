@@ -2,46 +2,51 @@ package com.stuff.sector_app.service;
 
 import com.stuff.sector_app.domain.Sector;
 import com.stuff.sector_app.domain.UserData;
+import com.stuff.sector_app.domain.UserDataResponse;
 import com.stuff.sector_app.repository.UserDataRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserDataService {
-    @Autowired
-    private UserDataRepository userDataRepository;
 
-    @Autowired
-    private SectorService sectorService;
-
-    public Optional<UserData> getUserDataBySessionId(String sessionId) {
-        return userDataRepository.findBySessionId(sessionId);
-    }
+    private final UserDataRepository userDataRepository;
+    private final SectorService sectorService;
 
     @Transactional
-    public UserData saveUserData(String name, List<Long> sectorIds, Boolean agreedToTerms, String sessionId) {
-        UserData userData = userDataRepository.findBySessionId(sessionId).orElse(new UserData());
-        userData.setName(name);
+    public UserDataResponse saveUserData(String name, List<Long> sectorIds, Boolean agreedToTerms) {
+        UserData userData = userDataRepository.findByName(name)
+                .orElseGet(() -> {
+                    UserData newUser = new UserData();
+                    newUser.setName(name);
+                    return newUser;
+                });
 
-        Set<Sector> selectedSectors = null;
-        if (sectorIds != null && !sectorIds.isEmpty()) {
-            selectedSectors = new HashSet<>(sectorService.getAllSectorsByIds(sectorIds));
-        }
+        Set<Sector> selectedSectors = new HashSet<>(sectorService.getAllSectorsByIds(sectorIds));
         userData.setSelectedSectors(selectedSectors);
-
         userData.setAgreedToTerms(agreedToTerms);
-        userData.setSessionId(sessionId);
-        return userDataRepository.save(userData);
+
+        UserData saved = userDataRepository.save(userData);
+        return new UserDataResponse(
+                saved.getName(),
+                saved.getSelectedSectors().stream()
+                        .map(Sector::getId)
+                        .collect(Collectors.toList()),
+                saved.getAgreedToTerms()
+        );
     }
 
-    public String generateSessionId() {
-        return UUID.randomUUID().toString();
+    private Set<Sector> getSelectedSectors(List<Long> sectorIds) {
+        if (sectorIds != null && !sectorIds.isEmpty()) {
+            return new HashSet<>(sectorService.getAllSectorsByIds(sectorIds));
+        }
+        return null;
     }
 }

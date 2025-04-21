@@ -1,12 +1,3 @@
-DROP TABLE IF EXISTS sectors CASCADE;
-
-CREATE TABLE IF NOT EXISTS sectors (
-    id BIGINT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    parent_id BIGINT,
-    FOREIGN KEY (parent_id) REFERENCES sectors(id)
-);
-
 INSERT INTO SECTORS (id, name, parent_id) VALUES
 (1, 'Manufacturing', NULL),
 (19, 'Construction materials', 1),
@@ -87,22 +78,3 @@ INSERT INTO SECTORS (id, name, parent_id) VALUES
 (114, 'Rail', 21),
 (112, 'Road', 21),
 (113, 'Water', 21);
-
-DROP TABLE IF EXISTS user_data CASCADE;
-
-CREATE TABLE user_data (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    agreed_to_terms BOOLEAN NOT NULL,
-    session_id VARCHAR(255)
-);
-
-DROP TABLE IF EXISTS user_selected_sectors CASCADE;
-
-CREATE TABLE user_selected_sectors (
-    user_data_id BIGINT NOT NULL,
-    sector_id BIGINT NOT NULL,
-    PRIMARY KEY (user_data_id, sector_id),
-    FOREIGN KEY (user_data_id) REFERENCES user_data(id),
-    FOREIGN KEY (sector_id) REFERENCES sectors(id)
-);

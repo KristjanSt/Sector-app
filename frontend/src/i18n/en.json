@@ -1,0 +1,27 @@
+{
+  "form": {
+    "title": "Please enter your name and pick sectors you are currently involved in",
+    "submit": "Submit",
+    "submitInProgress": "Submitting...",
+    "name": {
+      "label": "Name",
+      "required": "You must enter a name",
+      "tooLong": "Name cannot be longer than 64 characters"
+    },
+    "sectors": {
+      "label": "Select sectors",
+      "required": "You must select at least one sector",
+      "unknown": "Unknown Sector"
+    },
+    "agreement": {
+      "label": "Agree to terms"
+    }
+  },
+  "state": {
+    "error": "Failed to load sectors."
+  },
+  "toast": {
+    "success": "Data submitted successfully!",
+    "error": "Submission failed"
+  }
+}

@@ -1,6 +1,5 @@
 package com.stuff.sector_app.domain;
 
-import java.util.Set;
+import java.util.List;
 
-public record UserDataResponse(String name, Set<Sector> selectedSectors, Boolean agreedToTerms) {
-}
+public record UserDataResponse(String name, List<Long> sectorIds, Boolean agreedToTerms) {}

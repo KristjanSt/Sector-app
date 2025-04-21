@@ -2,30 +2,25 @@ package com.stuff.sector_app.controller;
 
 import com.stuff.sector_app.domain.Sector;
 import com.stuff.sector_app.service.SectorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/sectors")
+@RequiredArgsConstructor
 public class SectorController {
 
-    @Autowired
-    private SectorService sectorService;
+    private final SectorService sectorService;
 
-    @GetMapping("all")
+    @GetMapping
     public List<Sector> getAllSectors(){
         return sectorService.getAllSectors();
     }
 
-    @GetMapping("/top-level")
-    public List<Sector> getTopLevelSectors() {
-        return sectorService.getAllTopLevelSectors();
-    }
-
-    @GetMapping("/by-ids")
-    public List<Sector> getSectorsByIds(@RequestParam List<Long> requestedIds) {
-        return sectorService.getAllSectorsByIds(requestedIds);
+    @GetMapping("/tree")
+    public List<Sector> getSectorsAsTree(){
+        return sectorService.buildSectorTree();
     }
 }

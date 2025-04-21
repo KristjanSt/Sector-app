@@ -30,6 +30,4 @@ public class UserData {
 
     private Boolean agreedToTerms;
 
-    private String sessionId;
-
 }
