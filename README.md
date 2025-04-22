@@ -60,7 +60,6 @@ You have two options to run the backend:
     ./gradlew bootRun
     ```
 
-    (On Windows, use `gradlew.bat bootRun`)
 
 * **Using IntelliJ IDEA:**
     1.  Import the `backend` folder as a Gradle project in IntelliJ.
