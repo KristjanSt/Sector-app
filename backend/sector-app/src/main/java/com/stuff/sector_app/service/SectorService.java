@@ -3,7 +3,6 @@ package com.stuff.sector_app.service;
 import com.stuff.sector_app.domain.Sector;
 import com.stuff.sector_app.repository.SectorRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,11 +27,12 @@ public class SectorService {
 
     public List<Sector> buildSectorTree() {
         List<Sector> rootSectors = sectorRepository.findByParentIdIsNull();
-        Map<Long, List<Sector>> parentToChildMap = sectorRepository.findAll().stream()
+        List<Sector> allSectors = sectorRepository.findAll();
+        Map<Long, List<Sector>> parentToChildMap = allSectors.stream()
                 .filter(sector -> sector.getParentId() != null)
                 .collect(Collectors.groupingBy(Sector::getParentId));
 
-        for (Sector sector : sectorRepository.findAll())
+        for (Sector sector : allSectors)
             sector.setChildren(new ArrayList<>());
 
         for (Sector root : rootSectors)

@@ -33,9 +33,8 @@ public class Sector {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Sector)) return false;
-        Sector sector = (Sector) o;
-        return Objects.equals(id, sector.id);
+        if (o instanceof Sector sector) return sector.id.equals(id);
+        return false;
     }
 
     @Override
